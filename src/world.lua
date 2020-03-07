@@ -9,8 +9,8 @@ function m:add()
 end
 
 function m:addEntity(e)
-   if e.size and e.pos and not self.physics:hasItem(e) then
-     local x, y = e.pos.x, e.pos.y
+   if e.size and e.position and not self.physics:hasItem(e) then
+     local x, y = e.position.x, e.position.y
      if e.size.offset then
        if e.size.offset.x then
         x = x + e.size.offset.x
@@ -33,7 +33,7 @@ end
 
 
 function m:removeEntity(e)
-    if e.size and e.pos and self.physics:hasItem(e) then
+    if e.size and e.position and self.physics:hasItem(e) then
       self.physics:remove(e)
     end
    self.entities[e] = nil
