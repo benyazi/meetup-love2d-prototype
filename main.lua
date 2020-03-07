@@ -22,35 +22,44 @@ Systems = require.tree('src.systems')
 World = world:new(
   Bump.newWorld(32),
   Systems.draw.DrawRectSystem,
-  Systems.draw.ChangeColorSystem,
-  Systems.draw.DrawMouseSelectionSystem,
-  Systems.event.MouseClickSystem,
+  -- Systems.draw.ChangeColorSystem,
+  -- Systems.MouseSelection.DrawMouseSelectionSystem,
+  -- Systems.MouseSelection.UpdateMouseSelectionSystem,
+  Systems.dev.DrawFpsSystem,
   Systems.clear.ClearEventSystem
 )
 
+--  create system filters
 local drawFilter = Tiny.requireAll('isDrawSystem')
 local drawGuiFilter = Tiny.requireAll('isDrawGuiSystem')
 local updateFilter = Tiny.rejectAny('isDrawSystem','isDrawGuiSystem')
 
 function love.load()
   love.window.setTitle( 'GAME' )
+  -- load all image, sound and etc.
   Assets.load()
+  --  save window size to global
   WindowHeight = love.graphics.getHeight()
   WindowWidth = love.graphics.getWidth()
+  --  Create camera instanse and set zoom value
   Camera = camera(WindowWidth/2,WindowHeight/2)
   local cam_scale = 1
   Camera:zoomTo(cam_scale)
+-- set random seed
   math.randomseed(os.time())
 
   for i=1,5 do
     local block = Entities.Block(
-      10 * love.math.random(10, 70),
-      10 * love.math.random(10, 70),
+      10 * love.math.random(0, 64),
+      10 * love.math.random(0, 64),
       50,45
     )
     block.drawRect = Components.DrawRect(0.3,0.8,0.1)
     World:addEntity(block)
   end
+
+  -- Add sumply entity for print FPS system
+  World:addEntity({drawFps = true})
 end
 
 function love.draw()
