@@ -5,6 +5,7 @@ function Mario:init(x, y)
   self.position = Components.Position(x,y)
   self.size = Components.Size(32,32)
   self.marioControl = Components.moving.MarioControl(10)
+  self.isPlayer = true
 end
 
 return Mario

@@ -54,6 +54,11 @@ function love.load()
   World:addEntity(Entities.Platform(0,WindowHeight-32,WindowWidth,32))
   -- Add sumply entity for print FPS system
   World:addEntity({drawFps = true})
+
+  for i=1,3 do
+    local randX = love.math.random(0,WindowWidth-32)
+    World:addEntity(Entities.Hole(randX, WindowHeight-64))
+  end
 end
 
 function love.draw()
