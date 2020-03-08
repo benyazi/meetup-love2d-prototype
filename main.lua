@@ -21,11 +21,17 @@ Systems = require.tree('src.systems')
 -- create new world
 World = world:new(
   Bump.newWorld(32),
+  Systems.keyLock.DrawKeySystem,
   Systems.draw.DrawRectSystem,
   Systems.moving.MarioControlSystem,
+  Systems.water.UpdateWaterLevelSystem,
   -- Systems.draw.ChangeColorSystem,
   -- Systems.MouseSelection.DrawMouseSelectionSystem,
   -- Systems.MouseSelection.UpdateMouseSelectionSystem,
+  Systems.water.DrawWaterSystem,
+  Systems.keyLock.TriggerEnterSystem,
+  Systems.keyLock.KeyControlSystem,
+  Systems.keyLock.HoleDoneSystem,
   Systems.dev.DrawFpsSystem,
   Systems.clear.ClearEventSystem
 )
@@ -54,11 +60,16 @@ function love.load()
   World:addEntity(Entities.Platform(0,WindowHeight-32,WindowWidth,32))
   -- Add sumply entity for print FPS system
   World:addEntity({drawFps = true})
-
+  -- Global list of holes
+  HOLES = {}
   for i=1,3 do
     local randX = love.math.random(0,WindowWidth-32)
-    World:addEntity(Entities.Hole(randX, WindowHeight-64))
+    local hole = Entities.Hole(randX, WindowHeight-64)
+    HOLES[hole] = true
+    World:addEntity(hole)
   end
+  -- add water manager
+  World:addEntity(Entities.Water())
 end
 
 function love.draw()
