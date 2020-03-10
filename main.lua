@@ -32,15 +32,18 @@ World = world:new(
   Systems.keyLock.TriggerEnterSystem,
   Systems.keyLock.KeyControlSystem,
   Systems.keyLock.HoleDoneSystem,
+  Systems.pump.PumpDoneSystem,
   Systems.dev.DrawFpsSystem,
-  Systems.clear.ClearEventSystem
+  Systems.hole.HoleSpawnSystem,
+  Systems.clear.ClearEventSystem,
+  Systems.clear.ClearBtnSystem
 )
 
 --  create system filters
 local drawFilter = Tiny.requireAll('isDrawSystem')
 local drawGuiFilter = Tiny.requireAll('isDrawGuiSystem')
 local updateFilter = Tiny.rejectAny('isDrawSystem','isDrawGuiSystem')
-
+BTN_PRESSED = {}
 function love.load()
   love.window.setTitle( 'GAME' )
   -- load all image, sound and etc.
@@ -69,7 +72,14 @@ function love.load()
     World:addEntity(hole)
   end
   -- add water manager
-  World:addEntity(Entities.Water())
+  WaterManager = Entities.Water()
+  World:addEntity(WaterManager)
+  -- add pump
+  World:addEntity(Entities.Pump(WindowWidth-64, WindowHeight-64))
+  -- add spawner
+  World:addEntity(Entities.HoleSpawner(0, WindowHeight-64))
+
+  World:addEntity({garbageCollector = true})
 end
 
 function love.draw()
@@ -88,7 +98,11 @@ function love.mousepressed(x, y, button)
 end
 
 function love.keypressed(key, scancode, isrepeat)
+  BTN_PRESSED[key] = true
 end
 
-function love.keyreleased(k, scancode)
+function love.keyreleased(key, scancode)
+  -- if BTN_PRESSED[key] then
+  --   BTN_PRESSED[key] = nil
+  -- end
 end

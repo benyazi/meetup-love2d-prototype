@@ -14,7 +14,8 @@ function system:process(e)
     else
       love.graphics.setColor(1,1,1)
     end
-    love.graphics.print(key.key, e.position.x + (i-1)*30,  e.position.y - 25)
+    love.graphics.draw(Assets['arrow_' .. key.key], e.position.x + (i-1)*10,  e.position.y - 25)
+    -- love.graphics.print(key.key, e.position.x + (i-1)*30,  e.position.y - 25)
   end
   -- return default color
   love.graphics.setColor(0,0,0)

@@ -1,5 +1,5 @@
 local system = Tiny.processingSystem({
-  filter = Tiny.filter('keyLock')
+  filter = Tiny.filter('keyLock&hole')
 })
 
 function system:process(e, dt)
