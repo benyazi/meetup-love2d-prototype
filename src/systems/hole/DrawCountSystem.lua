@@ -4,7 +4,7 @@ local system = Tiny.processingSystem({
 
 function system:process(e)
 	love.graphics.setColor(1,0,0)
-  love.graphics.print("FPS: " .. love.timer.getFPS(), 37, 37)
+  love.graphics.print("HOLES DONE: " .. HOLE_DONE_COUNT, 37, 57)
 	love.graphics.setColor(1,1,1)
 end
 

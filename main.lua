@@ -21,8 +21,9 @@ Systems = require.tree('src.systems')
 -- create new world
 World = world:new(
   Bump.newWorld(32),
-  Systems.keyLock.DrawKeySystem,
   Systems.draw.DrawRectSystem,
+  Systems.keyLock.DrawKeySystem,
+  Systems.draw.DrawSpriteSystem,
   Systems.moving.MarioControlSystem,
   Systems.water.UpdateWaterLevelSystem,
   -- Systems.draw.ChangeColorSystem,
@@ -35,6 +36,13 @@ World = world:new(
   Systems.pump.PumpDoneSystem,
   Systems.dev.DrawFpsSystem,
   Systems.hole.HoleSpawnSystem,
+  Systems.hole.DrawCountSystem,
+  Systems.trip.DrawTripSystem,
+  Systems.trip.UpdateTripSystem,
+  Systems.hole.UpdateHoleDoneCountSystem,
+  Systems.draw.DrawTextSystem,
+  Systems.event.GameOverSystem,
+  Systems.event.GameWinSystem,
   Systems.clear.ClearEventSystem,
   Systems.clear.ClearBtnSystem
 )
@@ -44,6 +52,15 @@ local drawFilter = Tiny.requireAll('isDrawSystem')
 local drawGuiFilter = Tiny.requireAll('isDrawGuiSystem')
 local updateFilter = Tiny.rejectAny('isDrawSystem','isDrawGuiSystem')
 BTN_PRESSED = {}
+-- maximum count of hole in level
+HOLE_MAX = 5
+-- hole size
+HOLE_POWER = 12
+-- seconds for trip
+TRIP_TIME = 300
+-- hole done count, realy?
+HOLE_DONE_COUNT = 0
+
 function love.load()
   love.window.setTitle( 'GAME' )
   -- load all image, sound and etc.
@@ -60,18 +77,17 @@ function love.load()
 
   Mario = Entities.player.Mario(WindowWidth/2,WindowHeight-64)
   World:addEntity(Mario)
+
   World:addEntity(Entities.Platform(0,WindowHeight-32,WindowWidth,32))
+  World:addEntity(Entities.Platform(0,0,WindowWidth,32))
+  World:addEntity(Entities.Platform(0,0,32,WindowHeight))
+  World:addEntity(Entities.Platform(WindowWidth-32,0,32,WindowHeight))
   -- Add sumply entity for print FPS system
-  World:addEntity({drawFps = true})
+  World:addEntity({guiManager = true})
+  World:addEntity({tripManager = {value = 0}})
   -- Global list of holes
   HOLES = {}
-  for i=1,3 do
-    local randX = love.math.random(0,WindowWidth-32)
-    local hole = Entities.Hole(randX, WindowHeight-64)
-    HOLES[hole] = true
-    World:addEntity(hole)
-  end
-  -- add water manager
+
   WaterManager = Entities.Water()
   World:addEntity(WaterManager)
   -- add pump

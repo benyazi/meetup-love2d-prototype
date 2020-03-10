@@ -16,6 +16,7 @@ function system:process(e, dt)
     World:removeEntity(e)
     HOLES[e] = nil
     e = nil
+    World:addEntity(Entities.events.HoleDone())
   end
 end
 
