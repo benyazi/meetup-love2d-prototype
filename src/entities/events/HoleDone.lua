@@ -1,8 +1,8 @@
-local GameOver = Class{}
+local HoleDone = Class{}
 
-function GameOver:init()
-  self.hgameOverEvent = true
+function HoleDone:init()
+  self.holeDoneEvent = true
   self.clearEvent = true
 end
 
-return GameOver
+return HoleDone
